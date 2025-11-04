@@ -11,7 +11,10 @@ const FILE_PATH = "res://scripts/game_state.gd"
 @export var play_time : int
 @export var total_time : int
 
-
+var day_count = 1       # O dia atual (começa no 1)
+var has_package = false # O porteiro está carregando um pacote? (true/false)
+var target_ap = ""      # Qual o apartamento de destino (ex: "101", "202")
+var has_peeked = false  # VARIÁVEL CRÍTICA: O jogador espiou o pacote? (falsa por padrão)
 
 
 static func get_level_state(level_state_key : String) -> LevelState:

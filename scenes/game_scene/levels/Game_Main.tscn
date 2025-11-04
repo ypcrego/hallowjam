@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://3tahujs16mhn"]
+[gd_scene load_steps=12 format=3 uid="uid://3tahujs16mhn"]
 
 [ext_resource type="Texture2D" uid="uid://bepelt4mg5j74" path="res://assets/tileset/A4.png" id="1_gnvwb"]
 [ext_resource type="PackedScene" uid="uid://bswlu8qntiul6" path="res://scenes/game_scene/Player.tscn" id="1_xyw5t"]
 [ext_resource type="Texture2D" uid="uid://cksefu0phrhfq" path="res://assets/tileset/A5.png" id="2_1q2p7"]
+[ext_resource type="Script" uid="uid://cfcfaryohbf75" path="res://scripts/desk_interaction.gd" id="4_uohex"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_1q2p7"]
 vertices = PackedVector2Array(8, 8, -8, 8, -8, -8, 8, -8)
@@ -1150,8 +1151,15 @@ navigation_layer_0/layers = 1
 sources/3 = SubResource("TileSetAtlasSource_gnvwb")
 sources/4 = SubResource("TileSetAtlasSource_1q2p7")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xyw5t"]
+size = Vector2(12, 8)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_uohex"]
+size = Vector2(5, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uohex"]
+
 [node name="GameMain" type="Node2D"]
-position = Vector2(473, 287)
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_xyw5t")
@@ -1163,3 +1171,24 @@ position = Vector2(69, 56)
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
+
+[node name="Desk_Area" type="StaticBody2D" parent="."]
+position = Vector2(117, 49)
+script = ExtResource("4_uohex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk_Area"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_xyw5t")
+
+[node name="Sprite2D" type="Sprite2D" parent="Desk_Area"]
+position = Vector2(0, -0.6249876)
+scale = Vector2(2.5, 9.250025)
+texture = SubResource("PlaceholderTexture2D_uohex")
+
+[node name="Area2D" type="Area2D" parent="Desk_Area"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Desk_Area/Area2D"]
+shape = SubResource("RectangleShape2D_uohex")
+
+[connection signal="body_entered" from="Desk_Area/Area2D" to="Desk_Area" method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Desk_Area/Area2D" to="Desk_Area" method="_on_area_2d_body_exited"]

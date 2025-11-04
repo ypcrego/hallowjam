@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 
-const SPEED = 200.0
+const SPEED = 100.0
 
 func _physics_process(delta) -> void:
 	# 1. Captura do Input de Movimento
