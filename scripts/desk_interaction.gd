@@ -13,7 +13,11 @@ func _ready():
 		printerr("ERRO: GlobalState não está configurado como Autoload!")
 
 # --- SINAIS CONECTADOS (Conecte manualmente no Godot) ---
+	game_state.package_status_changed.connect(_on_package_status_changed)
 
+func _on_package_status_changed(is_holding: bool, ap: String):
+	# Exemplo de como reagir ao sinal
+	print("STATUS ATUALIZADO VIA SINAL! Pacote? %s. Destino: %s" % [is_holding, ap])
 
 # --- LÓGICA DE INTERAÇÃO ---
 
@@ -31,23 +35,27 @@ func handle_desk_interaction():
 
 
 func receive_package():
-	# 1. Marca que está segurando um pacote
-	game_state.has_package = true
-
+	var target_ap = ""
 	# 2. Define o pacote com base no dia
 	if game_state.day_count == 1:
-		game_state.target_ap = "101"
+		target_ap = "101"
 		print("NOVO: Pacote normal para o AP 101. Entregar.")
 
 	elif game_state.day_count == 2:
-		game_state.target_ap = "202"
+		target_ap = "202"
 		# Na ETAPA 3, você colocará a escolha de espiar AQUI. Por enquanto, apenas registra.
 		print("NOVO: Pacote grande e PESADO para o AP 202. (Gatilho da História)")
 
 	elif game_state.day_count >= 3:
 		# Após o Dia 2, o loop se repete com uma entrega comum
-		game_state.target_ap = "104"
+		target_ap = "104"
 		print("NOVO: Pacote comum para o AP 104.")
+	# 1. Marca que está segurando um pacote
+	game_state.set_package_status(true, target_ap)
+
+
+
+
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:

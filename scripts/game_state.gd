@@ -16,6 +16,7 @@ var has_package = false # O porteiro está carregando um pacote? (true/false)
 var target_ap = ""      # Qual o apartamento de destino (ex: "101", "202")
 var has_peeked = false  # VARIÁVEL CRÍTICA: O jogador espiou o pacote? (falsa por padrão)
 
+signal package_status_changed(has_package, target_ap)
 
 static func get_level_state(level_state_key : String) -> LevelState:
 	if not has_game_state():
@@ -78,3 +79,11 @@ static func reset() -> void:
 	game_state.play_time = 0
 	game_state.total_time = 0
 	GlobalState.save()
+
+static func set_package_status(is_holding: bool, ap: String) -> void:
+	var game_state := get_or_create_state()
+	game_state.has_package = is_holding
+	game_state.target_ap = ap
+	GlobalState.save()
+	# Emite o sinal após a mudança
+	game_state.package_status_changed.emit(is_holding, ap)
